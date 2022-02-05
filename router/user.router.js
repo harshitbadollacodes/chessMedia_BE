@@ -208,10 +208,9 @@ router.post("/followUser/:profileId", verifyToken, async (req, res) => {
 
         // const updatedUser = await user.populate("followingList");
         // let followingList = updatedUser.followingList;
-
-        const updatedUser = await userToBeFollowed.populate("followersList");
         
-        const followersList = updatedUser.followersList;
+        const followersList = userToBeFollowed.followersList;
+        console.log(followersList);
 
         return res.json({ success: true, followersList });
 
