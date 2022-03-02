@@ -141,24 +141,18 @@ router.route("/editPost/:postId")
 .post(async (req, res) => {
     try {
         const { postId } = req.params;
-        console.log(postId);
         const { postInput, imageURL } = req.body;
 
-        console.log("imageURL", imageURL);
-
-        const post = await Post.findById(postId);
-        console.log(post);
-        
+        const post = await Post.findById(postId).populate("user comments.user");
         post.postContent = postInput.text;
         post.imageURL = imageURL;
 
         await post.save();
-        console.log("save", post);
 
         return res.json({
             success: true,
             post
-        })
+        });
 
     } catch(error) {
         console.log(error);
