@@ -24,6 +24,18 @@ const PostScehma = new Schema({
         ref: "User",
     }],
 
+    comments: [{
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+
+        comment: {
+            type: String,
+            required: true
+        }
+    }],
+
     savedPosts: [{
         type: Schema.Types.ObjectId,
         ref: "User",
