@@ -125,7 +125,12 @@ router.route("/profile/:userId")
     try {
         const { userId } = req.params;
 
-        const user = await User.findById(userId);
+        const user = await User
+                    .findById(userId)
+                    .populate({
+                        path: "followingList followersList", 
+                        select: "firstName lastName username"
+                    });
 
         res.json({ 
             success: true,
@@ -206,13 +211,15 @@ router.post("/followUser/:profileId", verifyToken, async (req, res) => {
         await user.save();
         await userToBeFollowed.save();
 
-        // const updatedUser = await user.populate("followingList");
-        // let followingList = updatedUser.followingList;
+        const followedUser = await userToBeFollowed.populate({
+            path: "followingList followersList", 
+            select: "firstName lastName username"
+        });
         
-        const followersList = userToBeFollowed.followersList;
-        console.log(followersList);
-
-        return res.json({ success: true, followersList });
+        return res.json({
+            success: true, 
+            followersList: followedUser.followersList 
+        });
 
     } catch(error) {
         console.log(error);
