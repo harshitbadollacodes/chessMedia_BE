@@ -36,6 +36,11 @@ const UserSchema = new Schema({
         default: "Hi there! I'm a member of knight club!!"
     },
 
+    displayPicture: {
+        type: String,
+        default: "https://res.cloudinary.com/dwrcvgzi0/image/upload/v1646990046/v0roqzc5ojjseyv8dplk.png"
+    },
+
     followingList: [{
         type: Schema.Types.ObjectId,
         ref: "User"

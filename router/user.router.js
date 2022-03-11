@@ -150,12 +150,13 @@ router.route("/profile/:userId")
 
 router.post("/editBio", verifyToken, async (req, res) => {
     try {  
-        const { bio } = req.body;
-        const userId = req.userId;
+        const { bio, imageURL } = req.body;
+        const { userId }= req;
         
         const user = await User.findById(userId);
 
-        user.bio = bio
+        user.bio = bio;
+        user.displayPicture = imageURL;
 
         const userDetails = await user.save();
         res.json({ success: true, userDetails });
