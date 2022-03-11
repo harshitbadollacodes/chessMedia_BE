@@ -33,7 +33,7 @@ const UserSchema = new Schema({
     bio: {
         type: String,
         trim: true,
-        default: "This is my bio"
+        default: "Hi there! I'm a member of knight club!!"
     },
 
     followingList: [{
