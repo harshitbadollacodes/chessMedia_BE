@@ -145,7 +145,7 @@ router.route("/editPost/:postId")
 
         const post = await Post.findById(postId).populate("user comments.user");
         post.postContent = postInput.text;
-        post.imageURL = imageURL;
+        post.image = imageURL;
 
         await post.save();
 
