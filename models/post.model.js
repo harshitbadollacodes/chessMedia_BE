@@ -36,10 +36,6 @@ const PostScehma = new Schema({
         }
     }],
 
-    savedPosts: [{
-        type: Schema.Types.ObjectId,
-        ref: "User",
-    }]
 
 }, { timestamps: true });
 
