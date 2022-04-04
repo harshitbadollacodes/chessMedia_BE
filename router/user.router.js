@@ -4,6 +4,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const { Post } = require("../models/post.model");
 
 const router = express.Router();
 dotenv.config();
@@ -128,9 +129,15 @@ router.route("/profile/:userId")
         const user = await User
                     .findById(userId)
                     .populate({
-                        path: "followingList followersList", 
-                        select: "firstName lastName username"
+                        path: "followingList followersList savedPosts", 
+                        select: "firstName lastName username comments likes image postContent",
+                        populate: {
+                            path: "user",
+                            select: "image firstName lastName username displaypicture" 
+                        }
                     });
+
+        
 
         res.json({ 
             success: true,
@@ -238,6 +245,73 @@ router.route("/followers/:profileId")
         const { profileId } = req.params;
     } catch(error) {
         console.log(error);
+    }
+});
+
+router.get("/savedPosts", verifyToken, async (req, res) => {
+    try {
+
+        const { userId } = req;
+        console.log(userId);
+
+        const user = await User.findById(userId).populate({
+            path: "savedPosts", 
+            select: "comments likes image postContent",
+            populate: {
+                path: "user",
+                select: "image firstName lastName username displayPicture"
+            }
+        });
+
+        let savedPosts = user.savedPosts;
+
+        res.json({ success: true, savedPosts });
+
+    } catch(error) {
+        console.log(error);
+        res.status(404).json({
+            success: false,
+            message: "check error message",
+            errorMessage: error.message
+        });
+    }
+})
+
+router.post("/savePost/:postId", verifyToken, async (req, res) => {
+    try {
+        
+        const { userId } = req;
+        const { postId } = req.params;
+
+        const user = await User.findById(userId);
+        console.log(user);
+
+        const alreadySaved = user.savedPosts.some(savedPostId => savedPostId.toString() === postId);
+
+        alreadySaved
+        ? user.savedPosts.pull(postId)
+        : user.savedPosts.push(postId);
+
+        await user.save();
+
+        const savedPost = await User.findById(userId).populate({
+            path: "savedPosts", 
+            select: "comments likes image postContent",
+            populate: {
+                path: "user",
+                select: "image firstName lastName username displayPicture"
+            }
+        });
+
+        res.json({ success: true, savedPost });
+
+    } catch(error) {
+        console.log(error);
+        res.status(404).json({
+            success: false,
+            message: "check error message",
+            errorMessage: error.message
+        });
     }
 });
 
