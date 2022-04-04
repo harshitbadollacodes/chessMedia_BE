@@ -32,7 +32,7 @@ router.route("/like/:postId")
         const { postId } = req.params;
         const userId = req.userId;
 
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId)
         console.log(post);
 
         let alreadyLiked = post.likes.some(likedUserId => likedUserId.toString() === userId );
@@ -64,10 +64,11 @@ router.route("/save/:postId")
         const post = await Post.findById(postId);
 
         let alreadySaved = post.savedPosts.some(likedUserId => likedUserId.toString() === userId );
+        console.log(alreadySaved);
         
-        alreadySaved ?
-        post.savedPosts.pull(userId) :
-        post.savedPosts.push(userId);
+        alreadySaved 
+        ? post.savedPosts.pull(userId) 
+        : post.savedPosts.push(userId);
 
         await post.save();
 
