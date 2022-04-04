@@ -129,12 +129,8 @@ router.route("/profile/:userId")
         const user = await User
                     .findById(userId)
                     .populate({
-                        path: "followingList followersList savedPosts", 
-                        select: "firstName lastName username comments likes image postContent",
-                        populate: {
-                            path: "user",
-                            select: "image firstName lastName username displaypicture" 
-                        }
+                        path: "followingList followersList", 
+                        select: "firstName lastName username",
                     });
 
         
