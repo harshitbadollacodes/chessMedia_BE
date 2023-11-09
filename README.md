@@ -2,7 +2,7 @@
 
 API server for videoLibrary app
 
-[API link](https://shrouded-beyond-24033.herokuapp.com/)
+[API link](https://https://chess-media-be.vercel.app/)
 
 Frontend source code: https://github.com/harshitbadollacodes/chess_media
 
